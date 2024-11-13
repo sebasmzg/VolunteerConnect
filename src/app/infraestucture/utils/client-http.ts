@@ -9,13 +9,14 @@ export class HttpClient {
     this.baseUrl = baseUrl || defaultBaseUrl;
   }
 
-  private async getHeader() {
+  private async getHeader(isFormData: boolean = false) {
     const session = await getServerSession(authOptions) as CustomSession;
     
-    const headers : Record<string, string> = {
-      "Content-Type": "application/json",
+    const headers : Record<string, string> = {};
+    if(!isFormData){
+      headers["Content-Type"] = "application/json";
     }
-    if (session && session.user.token){
+    if(session && session.user.token){
       headers["Authorization"] = `Bearer ${session.user.token}`;
     }
     return headers;
@@ -72,11 +73,12 @@ export class HttpClient {
   }
 
   async post<T, R>(url: string, data: R): Promise<T> {
-    const header = await this.getHeader();
+    const isFormData = data instanceof FormData;
+    const header = await this.getHeader(isFormData);
     const response = await fetch(`${this.baseUrl}/${url}`, {
       headers: header,
       method: "POST",
-      body: JSON.stringify(data),
+      body: isFormData ? data :  JSON.stringify(data),
     });
     return this.handleResponse(response);
   }

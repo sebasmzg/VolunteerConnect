@@ -14,6 +14,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import { EndPointUsers } from "@/app/core/application/model/users.enum";
 
 const registerSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -26,12 +27,8 @@ const registerSchema = yup.object().shape({
     .string()
     .oneOf(["organizer", "participant"], "Invalid role")
     .required("Role is required"),
-    photo: yup
-      .mixed<File>()
-      .required("Photo is required")
+  photo: yup.mixed<File>().required("Photo is required"),
 });
-
-
 
 export const RegisterForm = () => {
   const router = useRouter();
@@ -48,30 +45,30 @@ export const RegisterForm = () => {
   });
 
   const handleRegister = async (data: IUserRegister) => {
-    const formData = new FormData();
-    formData.append("email", data.email);
-    formData.append("password", data.password);
-    formData.append("name", data.name);
-    formData.append("role", data.role);
-    formData.append("photo", data.photo[0]);
-  
     try {
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("name", data.name);
+      formData.append("role", data.role);
+      formData.append("photo", data.photo[0]);
       console.log("trying to register data", data);
-      const response = await fetch(EndPointUsers.create_user,{
+      const response = await fetch(EndPointUsers.create_user, {
         method: "POST",
         body: formData,
       });
-      if (!response.ok){
+      if (!response.ok) {
         const errorData = await response.json();
         handleError(errorData);
         return;
       }
-  
+      alert("User registered successfully");
       router.push("/login");
     } catch (error) {
       console.log("Error in registration", error);
       handleError(error);
-  }
+    }
+  };
 
   const handleError = (error: unknown) => {
     const errorData = error as ErrorResponse;
