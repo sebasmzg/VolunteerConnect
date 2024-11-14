@@ -11,7 +11,6 @@ export class HttpClient {
 
   private async getHeader(isFormData: boolean = false) {
     const session = await getServerSession(authOptions) as CustomSession;
-    
     const headers : Record<string, string> = {};
     if(!isFormData){
       headers["Content-Type"] = "application/json";

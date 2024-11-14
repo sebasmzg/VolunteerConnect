@@ -1,16 +1,19 @@
 "use client";
 
-import { signOut } from 'next-auth/react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+/* import { MdOutlineAddCircleOutline } from "react-icons/md"; */
+
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { data: session } = useSession();
 
   const handleLogout = async () => {
-    signOut({callbackUrl: '/'});
-  }
+    signOut({ callbackUrl: "/" });
+  };
 
   return (
     <div className="flex items-center justify-between px-6 py-4 bg-white shadow-md">
@@ -18,7 +21,7 @@ export default function Navbar() {
 
       <div className="flex items-center space-x-5">
         <button className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
-          Descargar Reporte
+          {/* <MdOutlineAddCircleOutline /> */} <span>Descargar Reporte</span>
         </button>
         <button className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
           Nuevo Proyecto
@@ -29,10 +32,26 @@ export default function Navbar() {
             onClick={() => setMenuOpen(!menuOpen)}
             className="flex items-center space-x-5 text-sm font-medium text-gray-700 hover:text-slate-900 focus:outline-none"
           >
-            <Image src="/avatar.jpg" alt="avatar" width={32} height={32} className="rounded-full" />
-            <span>María García</span>
+            {session?.user?.photo ? (
+              <Image
+                src={session.user.photo}
+                alt="User photo"
+                width={32}
+                height={32}
+                className="rounded-full h-[32px] w-[32px]"
+              />
+            ) : (
+              <svg
+                className="w-8 h-8 text-gray-500"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+              </svg>
+            )}
+            <span>{session?.user?.email || "Guest"}</span>
             <svg
-              className={`w-4 h-4 transform ${menuOpen ? 'rotate-180' : ''}`}
+              className={`w-4 h-4 transform ${menuOpen ? "rotate-180" : ""}`}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -45,11 +64,19 @@ export default function Navbar() {
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 w-48 py-2 mt-2 bg-white border rounded-md shadow-lg"> 
-              <Link href="#" className="w-full text-center block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100">
+            <div className="absolute right-0 w-48 py-2 mt-2 bg-white border rounded-md shadow-lg">
+              <Link
+                href="#"
+                className="w-full text-center block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
+              >
                 Proyectos
               </Link>
-              <button className="w-full block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100" onClick={handleLogout}>Cerrar sesión</button>
+              <button
+                className="w-full block px-4 py-2 text-sm text-slate-700 hover:bg-slate-100"
+                onClick={handleLogout}
+              >
+                Cerrar sesión
+              </button>
             </div>
           )}
         </div>

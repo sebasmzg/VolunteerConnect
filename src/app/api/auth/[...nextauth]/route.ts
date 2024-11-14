@@ -6,6 +6,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 interface AuthToken {
   id?: string;
   token?: string;
+  photo?: string;
+  role?: string;
+  name?: string;
 }
 
 interface AuthUser {
@@ -13,6 +16,8 @@ interface AuthUser {
   name: string;
   email: string;
   token: string;
+  role: string;
+  photo: string;
 }
 
 export interface CustomSession extends Session {
@@ -49,11 +54,12 @@ export const authOptions: NextAuthOptions = {
           const authService = new AuthService();
           const response = await authService.login(loginRequest);
           return {
-            email: loginRequest.email,
-            id: loginRequest.email,
-            name: loginRequest.email,
+            email: response.data.user.email,
+            id: response.data.user.sub.toString(),
+            name: response.data.user.name,
             token: response.data.access_token,
             photo: response.data.user.photo,
+            role: response.data.user.role,
           } as AuthUser;
 
         } catch (error) {
@@ -72,6 +78,10 @@ export const authOptions: NextAuthOptions = {
         const authUser = user as AuthUser;
         token.id = authUser.id;
         token.token = authUser.token;
+        token.photo = authUser.photo;
+        token.role = authUser.role;
+        token.name = authUser.name;
+        token.email = authUser.email;
       }
       return token;
     },
@@ -79,8 +89,11 @@ export const authOptions: NextAuthOptions = {
       const customSession = session as CustomSession;
       customSession.user.id = (token as AuthToken).id;
       customSession.user.token = (token as AuthToken).token;
-      console.log("session: ",session);
-      console.log("token: ",token)
+      customSession.user.photo = (token as AuthToken).photo;
+      customSession.user.role = (token as AuthToken).role;
+      customSession.user.name = (token as AuthToken).name;
+      customSession.user.email = (token as AuthToken).email;
+      console.log("session nextauth: ",session);
       return customSession;
     },
 

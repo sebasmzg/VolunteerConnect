@@ -27,16 +27,20 @@ const registerSchema = yup.object().shape({
     .string()
     .oneOf(["organizer", "participant"], "Invalid role")
     .required("Role is required"),
-  photo: yup.mixed<File>().required("Photo is required"),
+  photo: yup.mixed<File>(),
 });
 
 export const RegisterForm = () => {
   const router = useRouter();
 
+
+
   const {
     control,
     handleSubmit,
     setError,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<IUserRegister>({
     mode: "onChange",
@@ -44,14 +48,26 @@ export const RegisterForm = () => {
     resolver: yupResolver(registerSchema),
   });
 
+  const changePhoto = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      console.log("file", file);
+      setValue("photo", file);
+    }
+  }
+
   const handleRegister = async (data: IUserRegister) => {
     try {
+      console.log("data", data);
+      console.log("photo", getValues("photo"));
+
+  
       const formData = new FormData();
       formData.append("email", data.email);
       formData.append("password", data.password);
       formData.append("name", data.name);
       formData.append("role", data.role);
-      formData.append("photo", data.photo[0]);
+      formData.append("photo", getValues("photo"));
       console.log("trying to register data", data);
       const response = await fetch(EndPointUsers.create_user, {
         method: "POST",
@@ -111,6 +127,7 @@ export const RegisterForm = () => {
         type="text"
         error={errors.name}
       />
+      <input type="file" name="photo" onChange={changePhoto} />
       <FormFieldSelect<IUserRegister>
         control={control}
         name="role"
@@ -121,13 +138,13 @@ export const RegisterForm = () => {
         ]}
         error={errors.role}
       />
-      <FormField<IUserRegister>
+      {/* <FormField<IUserRegister>
         control={control}
         name="photo"
         label="Photo URL"
         type="file"
         error={errors.photo}
-      />
+      /> */}
       <ButtonSubmit title="Register" />
     </Form>
   );
