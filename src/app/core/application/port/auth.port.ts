@@ -1,5 +1,4 @@
-import { ILoginResponse } from "../dto/auth/login-request.dto";
-import { ILoginRequest } from "../dto/auth/login-response.dto";
+import { ILoginRequest, ILoginResponse } from "../dto/auth";
 
 
 export interface PAuth {

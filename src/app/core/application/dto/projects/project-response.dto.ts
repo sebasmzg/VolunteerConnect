@@ -1,13 +1,13 @@
-import { UserData } from "../users/user-response.dto";
+import { Organizer, UserData } from "../users/user-response.dto";
 
-export interface IProjectResponse {
+export interface IProjectPageable {
     statusCode: number;
     message:    string;
-    data:       Datum[];
+    data:       IProject[];
     metadata:   Metadata;
 }
 
-export interface Datum {
+export interface IProject {
     id:          number;
     title:       string;
     description: string;
@@ -23,4 +23,26 @@ export interface Metadata {
     itemsPerPage: number;
     totalPages:   number;
     currentPage:  number;
+}
+
+export interface IProjectUpdateResponse {
+    statusCode: number;
+    message:    string;
+    data:       IProject[];
+}
+
+export interface IProjectCreateResponse {
+    statusCode: number;
+    message:    string;
+    data:       ProjectCreated;
+}
+
+export interface ProjectCreated {
+    title:       string;
+    description: string;
+    startDate:   Date;
+    endDate:     Date;
+    organizer:   Organizer;
+    id:          number;
+    isActive:    boolean;
 }

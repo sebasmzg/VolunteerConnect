@@ -4,7 +4,8 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-/* import { MdOutlineAddCircleOutline } from "react-icons/md"; */
+import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { GrDocumentDownload } from "react-icons/gr";
 
 
 export default function Navbar() {
@@ -21,10 +22,12 @@ export default function Navbar() {
 
       <div className="flex items-center space-x-5">
         <button className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
-          {/* <MdOutlineAddCircleOutline /> */} <span>Descargar Reporte</span>
+          <div className="flex items-center justify-between"><div className="mr-2"><GrDocumentDownload /> </div>
+            <span>Descargar Reporte</span></div> 
         </button>
         <button className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
-          Nuevo Proyecto
+        <div className="flex items-center justify-between"><div className="mr-2"><MdOutlineAddCircleOutline /> </div>
+        <span>Nuevo Proyecto</span></div> 
         </button>
 
         <div className="relative">
@@ -32,9 +35,9 @@ export default function Navbar() {
             onClick={() => setMenuOpen(!menuOpen)}
             className="flex items-center space-x-5 text-sm font-medium text-gray-700 hover:text-slate-900 focus:outline-none"
           >
-            {session?.user?.photo ? (
+            {session?.user?.image ? (
               <Image
-                src={session.user.photo}
+                src={session.user.image}
                 alt="User photo"
                 width={32}
                 height={32}

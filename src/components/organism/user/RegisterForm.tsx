@@ -134,7 +134,7 @@ export const RegisterForm = () => {
         label="Role"
         options={[
           { value: "organizer", label: "Organizer" },
-          { value: "participant", label: "Participant" },
+          { value: "volunteer", label: "Volunteer" },
         ]}
         error={errors.role}
       />

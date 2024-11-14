@@ -9,6 +9,7 @@ interface AuthToken {
   photo?: string;
   role?: string;
   name?: string;
+  email?: string;
 }
 
 interface AuthUser {
@@ -24,9 +25,9 @@ export interface CustomSession extends Session {
   user: {
     id?: string;
     token?: string;
-    name?: string | null;
     email?: string | null;
     photo?: string | null;
+    role?: string | null;
   };
 }
 
@@ -56,7 +57,6 @@ export const authOptions: NextAuthOptions = {
           return {
             email: response.data.user.email,
             id: response.data.user.sub.toString(),
-            name: response.data.user.name,
             token: response.data.access_token,
             photo: response.data.user.photo,
             role: response.data.user.role,
@@ -76,12 +76,12 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         const authUser = user as AuthUser;
-        token.id = authUser.id;
-        token.token = authUser.token;
-        token.photo = authUser.photo;
-        token.role = authUser.role;
+        token.sub = authUser.id;
+        token.picture = authUser.photo;
         token.name = authUser.name;
         token.email = authUser.email;
+        token.token= authUser.token;
+        token.role = authUser.role;
       }
       return token;
     },
@@ -91,9 +91,7 @@ export const authOptions: NextAuthOptions = {
       customSession.user.token = (token as AuthToken).token;
       customSession.user.photo = (token as AuthToken).photo;
       customSession.user.role = (token as AuthToken).role;
-      customSession.user.name = (token as AuthToken).name;
       customSession.user.email = (token as AuthToken).email;
-      console.log("session nextauth: ",session);
       return customSession;
     },
 

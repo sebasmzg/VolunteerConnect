@@ -16,3 +16,9 @@ export interface UserData {
 export enum Role {
     Organizer = "organizer",
 }
+
+export interface Organizer {
+    id:    number;
+    email: string;
+    role:  string;
+}
