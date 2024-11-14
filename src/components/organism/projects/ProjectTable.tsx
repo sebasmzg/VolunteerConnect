@@ -1,5 +1,10 @@
+"use client";
+
 import { IProjectPageable } from "@/app/core/application/dto/projects/project-response.dto";
+import { InputSearch } from "@/components/atoms/input-search";
+import { ButtonActions } from "@/components/molecules/Button-actions";
 import Pagination from "@/components/molecules/Pagination";
+import { useEffect, useState } from "react";
 
 interface TableProjectsProps {
   data: IProjectPageable | null;
@@ -14,23 +19,31 @@ export const ProjectTable = ({
   totalPages,
   onPageChange,
 }: TableProjectsProps) => {
-  const handleEdit = () => {
-    console.log("edit");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+    return () => {
+      clearTimeout(handler);
+    }
+  },[searchTerm]);
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
-  const handleDelete = () => {
-    console.log("delete");
-  };
+  const filteredProjects = data?.data.filter((project) =>
+    project.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+  );
 
   return (
     <div className="bg-white shadow-lg rounded-lg">
       <div className="flex flex-col p-4 mb-2">
         <h2 className="text-xl font-semibold mb-5">Lista de Proyectos</h2>
-        <input
-          type="text"
-          placeholder="Buscar proyectos..."
-          className="p-2 border border-gray-300 rounded-md w-full md:w-1/3"
-        />
+        <InputSearch value={searchTerm} onChange={handleSearchChange} />
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
@@ -60,7 +73,7 @@ export const ProjectTable = ({
             </tr>
           </thead>
           <tbody className="text-gray-700 divide-y divide-gray-200">
-            {data?.data.map((project) => (
+            {filteredProjects?.map((project) => (
               <tr key={project.id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 font-semibold text-gray-900">
                   {project.title}
@@ -87,20 +100,7 @@ export const ProjectTable = ({
                 </td>
                 <td className="px-6 py-4">{project.organizer.name}</td>
                 <td className="px-6 py-4">
-                  <div className="flex justify-center gap-2">
-                    <button
-                      onClick={handleEdit}
-                      className="text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                      Editar
-                    </button>
-                    <button
-                      onClick={handleDelete}
-                      className="text-red-600 hover:text-red-800 font-medium"
-                    >
-                      Eliminar
-                    </button>
-                  </div>
+                  <ButtonActions />
                 </td>
               </tr>
             ))}

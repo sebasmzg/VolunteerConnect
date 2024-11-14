@@ -4,8 +4,8 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
-import { GrDocumentDownload } from "react-icons/gr";
+import { ButtonAdd } from "../atoms/Button-add";
+import { ButtonReport } from "../atoms/Button-report";
 
 
 export default function Navbar() {
@@ -19,16 +19,9 @@ export default function Navbar() {
   return (
     <div className="flex items-center justify-between px-6 py-4 bg-white shadow-md">
       <h1 className="text-2xl font-semibold">Dashboard</h1>
-
       <div className="flex items-center space-x-5">
-        <button className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
-          <div className="flex items-center justify-between"><div className="mr-2"><GrDocumentDownload /> </div>
-            <span>Descargar Reporte</span></div> 
-        </button>
-        <button className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
-        <div className="flex items-center justify-between"><div className="mr-2"><MdOutlineAddCircleOutline /> </div>
-        <span>Nuevo Proyecto</span></div> 
-        </button>
+        <ButtonReport />
+        <ButtonAdd />
 
         <div className="relative">
           <button
