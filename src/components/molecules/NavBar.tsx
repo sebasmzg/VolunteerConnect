@@ -6,11 +6,20 @@ import Link from "next/link";
 import { useState } from "react";
 import { ButtonAdd } from "../atoms/Button-add";
 import { ButtonReport } from "../atoms/Button-report";
+import { useModalContext } from "@/app/infraestucture/context/modal-context";
+import { CreateProjectTemplate } from "../template/CreateProjectTemplate";
 
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { data: session } = useSession();
+  const { openModal, setModalContent } = useModalContext();
+
+  const handleModal = () => {
+    console.log("trying to open modal");
+    setModalContent(<CreateProjectTemplate />);
+    openModal();
+  };
 
   const handleLogout = async () => {
     signOut({ callbackUrl: "/" });
@@ -21,7 +30,7 @@ export default function Navbar() {
       <h1 className="text-2xl font-semibold">Dashboard</h1>
       <div className="flex items-center space-x-5">
         <ButtonReport />
-        <ButtonAdd />
+        <ButtonAdd onClick={handleModal}/>
 
         <div className="relative">
           <button

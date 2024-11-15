@@ -1,6 +1,19 @@
-export const ButtonActions = () => {
+"use client";
+
+import { useModalContext } from "@/app/infraestucture/context/modal-context";
+import { ProjectsForm } from "../organism/projects/Create-form";
+import { IProject } from "@/app/core/application/dto/projects/project-response.dto";
+
+interface ButtonActionsProps {
+  itemData: IProject;
+}
+
+export const ButtonActions = ({ itemData }: ButtonActionsProps) => {
+  const { openModal, setModalContent } = useModalContext();
   const handleEdit = () => {
-    console.log("edit");
+    console.log("edit",itemData);
+    setModalContent(<ProjectsForm itemData={itemData} method="PUT" title="Edit Project" submit="Update" />);
+    openModal();
   };
 
   const handleDelete = () => {

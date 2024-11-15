@@ -19,7 +19,7 @@ export class ProjectsServices implements PProject {
         return await this.clientHttp.post(this.basePath, req);
     }
 
-    async updateProject(req: IProjectRequest, id: string): Promise<IProjectUpdateResponse> {
+    async updateProject(req: IProject, id: number): Promise<IProjectUpdateResponse> {
         return await this.clientHttp.put(this.basePath,id, req);
     }
 

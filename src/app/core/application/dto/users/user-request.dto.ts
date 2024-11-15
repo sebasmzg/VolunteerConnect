@@ -3,5 +3,5 @@ export interface IUserRegister {
     password: string;
     name: string;
     role: "organizer" | "volunteer";
-    photo: File;
+    photo?: File;
 }

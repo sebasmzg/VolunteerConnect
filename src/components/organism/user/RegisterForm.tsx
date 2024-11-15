@@ -25,7 +25,7 @@ const registerSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
   role: yup
     .string()
-    .oneOf(["organizer", "participant"], "Invalid role")
+    .oneOf(["organizer", "volunteer"], "Invalid role")
     .required("Role is required"),
   photo: yup.mixed<File>(),
 });
@@ -67,7 +67,10 @@ export const RegisterForm = () => {
       formData.append("password", data.password);
       formData.append("name", data.name);
       formData.append("role", data.role);
-      formData.append("photo", getValues("photo"));
+      const photo = getValues("photo");
+      if (photo) {
+        formData.append("photo", photo);
+      }
       console.log("trying to register data", data);
       const response = await fetch(EndPointUsers.create_user, {
         method: "POST",
@@ -127,6 +130,7 @@ export const RegisterForm = () => {
         type="text"
         error={errors.name}
       />
+      <label htmlFor="photo">Photo</label>
       <input type="file" name="photo" onChange={changePhoto} />
       <FormFieldSelect<IUserRegister>
         control={control}
@@ -138,13 +142,6 @@ export const RegisterForm = () => {
         ]}
         error={errors.role}
       />
-      {/* <FormField<IUserRegister>
-        control={control}
-        name="photo"
-        label="Photo URL"
-        type="file"
-        error={errors.photo}
-      /> */}
       <ButtonSubmit title="Register" />
     </Form>
   );

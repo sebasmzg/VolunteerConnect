@@ -44,8 +44,12 @@ export const useProjects = () => {
     },[currentPage])
 
     const totalProjects = data?.metadata.totalItems || 0;
-    const activeProjects = data?.data.filter(project=>project.isActive === true).length || 0;
-    const totalOrganizers = new Set(users?.data.filter(user => user.role === "organizer")).size || 0;
+    const activeProjects = data?.data.reduce((count, project)=>{
+        return project.isActive ? count + 1 : count;
+    },0 || 0)
+    const totalOrganizers = users?.data.reduce((count, user)=>{
+        return user.role === "organizer" ? count + 1 : count;
+    },0 || 0)
     const nextProject = data
     ? data.data
         .filter(project => new Date(project.startDate) > new Date())
