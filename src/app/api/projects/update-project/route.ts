@@ -10,6 +10,7 @@ export const PUT = async (req: Request)=>{
         if(!id){
             return new NextResponse(JSON.stringify({ message: "Id is required" }), { status: 400 });
         }
+        
         console.log("data to update", data);
         const result = await projects.updateProject(data, id);
         return NextResponse.json(result,{status: 200});

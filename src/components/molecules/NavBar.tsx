@@ -21,6 +21,25 @@ export default function Navbar() {
     openModal();
   };
 
+  const handleDownload = async () => {
+    try {
+      const response = await fetch("/api/projects/report/download");
+      if (!response.ok) throw new Error("Error al descargar el reporte");
+  
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "reporte.xlsx";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleLogout = async () => {
     signOut({ callbackUrl: "/" });
   };
@@ -29,7 +48,7 @@ export default function Navbar() {
     <div className="flex items-center justify-between px-6 py-4 bg-white shadow-md">
       <h1 className="text-2xl font-semibold">Dashboard</h1>
       <div className="flex items-center space-x-5">
-        <ButtonReport />
+        <ButtonReport onClick={handleDownload}/>
         <ButtonAdd onClick={handleModal}/>
 
         <div className="relative">

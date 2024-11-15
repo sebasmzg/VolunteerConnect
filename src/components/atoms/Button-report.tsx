@@ -1,12 +1,12 @@
 import { GrDocumentDownload } from "react-icons/gr"
 
-const handleDownload = () => {
-    console.log("Descargando reporte");
+interface ButtonReportProps {
+    onClick: () => void;
 }
 
-export const ButtonReport = () => {
+export const ButtonReport = ({onClick}:ButtonReportProps) => {
     return (
-        <button onClick={handleDownload} className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
+        <button onClick={onClick} className="flex items-center px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-md hover:bg-slate-700">
           <div className="flex items-center justify-between"><div className="mr-2"><GrDocumentDownload /> </div>
             <span>Descargar Reporte</span></div> 
         </button>

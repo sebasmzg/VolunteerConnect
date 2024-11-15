@@ -2,7 +2,7 @@
 
 import { IProjectPageable } from "@/app/core/application/dto/projects/project-response.dto";
 import { InputSearch } from "@/components/atoms/input-search";
-import { ButtonActions } from "@/components/molecules/Button-actions";
+import { ProjectRow } from "@/components/atoms/Table-row";
 import Pagination from "@/components/molecules/Pagination";
 import { useEffect, useState } from "react";
 
@@ -74,35 +74,7 @@ export const ProjectTable = ({
           </thead>
           <tbody className="text-gray-700 divide-y divide-gray-200">
             {filteredProjects?.map((project) => (
-              <tr key={project.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 font-semibold text-gray-900">
-                  {project.title}
-                </td>
-                <td className="px-6 py-4">{project.description}</td>
-                <td className="px-6 py-4">
-                  {new Date(project.startDate).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-4">
-                  {project.endDate
-                    ? new Date(project.endDate).toLocaleDateString()
-                    : "N/A"}
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-3 py-1 rounded-full text-sm ${
-                      project.isActive === true
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
-                  >
-                    {project.isActive ? "Activo" : "Inactivo"}
-                  </span>
-                </td>
-                <td className="px-6 py-4">{project.organizer.name}</td>
-                <td className="px-6 py-4">
-                  <ButtonActions />
-                </td>
-              </tr>
+              <ProjectRow key={project.id} itemData={project} />
             ))}
           </tbody>
         </table>

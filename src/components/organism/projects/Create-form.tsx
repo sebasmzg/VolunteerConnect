@@ -87,24 +87,29 @@ export const ProjectsForm = ({
   };
 
   const updateService = async (data: IProject) => {
-    console.log("trying to edit service", data);
+    console.log("trying to edit project", data);
     try {
-      console.log("editing service");
+      console.log("editing project");
+      const formattedData = {
+        ...data,
+        startDate: new Date(data.startDate).toISOString().split('T')[0],
+        endDate: new Date(data.endDate).toISOString().split('T')[0],
+    };
       const response = await fetch(EndPointProjects.UPDATE_PROJECT, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(formattedData),
       });
       if (!response.ok) {
-        throw new Error("Error creating service");
+        throw new Error("Error updating project");
       }
       const result = await response.json();
       router.refresh();
-      console.log("service edited - form", result);
+      console.log("project edited - form", result);
     } catch (error) {
-      console.log("Error in edit service", error);
+      console.log("Error in edit project", error);
       handleError(error);
       return;
     }
