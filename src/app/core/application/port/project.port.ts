@@ -18,7 +18,7 @@ export interface PProject {
      * 
      * @param req Es el objeto que contiene los datos necesarios para actualizar un proyecto
      */
-    updateProject(req: IProject, id: number): Promise<IProjectUpdateResponse>
+    updateProject(req: IProjectRequest, id: number): Promise<IProjectUpdateResponse>
 
     /**
      * 

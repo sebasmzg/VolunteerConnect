@@ -86,7 +86,7 @@ export const ProjectsForm = ({
     }
   };
 
-  const updateService = async (data: IProject) => {
+  const updateService = async (data: IProjectRequest) => {
     console.log("trying to edit project", data);
     try {
       console.log("editing project");
@@ -95,7 +95,10 @@ export const ProjectsForm = ({
         startDate: new Date(data.startDate).toISOString().split('T')[0],
         endDate: new Date(data.endDate).toISOString().split('T')[0],
     };
-      const response = await fetch(EndPointProjects.UPDATE_PROJECT, {
+      if (!itemData) {
+        throw new Error("Item data is undefined");
+      }
+      const response = await fetch(`${EndPointProjects.UPDATE_PROJECT}/${itemData.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
